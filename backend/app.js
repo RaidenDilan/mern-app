@@ -9,6 +9,15 @@ const app = express();
 
 app.use(bodyParser.json());
 
+// CORS
+app.use((req, res, next) => {
+  // '*' ---> which domain should have access
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  next();
+});
+
 app.use('/api/places', placesRoutes);
 app.use('/api/users', usersRoutes);
 
@@ -24,6 +33,10 @@ app.use((err, req, res, next) => {
 });
 
 mongoose
-  .connect(`mongodb+srv://${ process.env.ATLAS_CLIENT_USERNAME }:${ process.env.ATLAS_CLIENT_PASSWORD }@cluster0-mhonq.mongodb.net/places?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(`mongodb+srv://${ process.env.ATLAS_CLIENT_USERNAME }:${ process.env.ATLAS_CLIENT_PASSWORD }@cluster0-mhonq.mongodb.net/mern?retryWrites=true&w=majority`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+  })
   .then(() => (console.log('Connected to database!'), app.listen(5000)))
   .catch((err) => console.log('Connection failed!', err));
