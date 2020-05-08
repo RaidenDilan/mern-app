@@ -14,7 +14,7 @@ const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode , setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const [formState, inputHandler, setFormData] = useForm({
     email: {
@@ -29,7 +29,6 @@ const Auth = () => {
 
   const authSubmitHandler = async event => {
     event.preventDefault();
-    // console.log(formState.inputs);
 
     if (isLoginMode) {}
     else {
@@ -43,17 +42,17 @@ const Auth = () => {
             email: formState.inputs.email.value,
             password: formState.inputs.password.value
           })
-          // signal:
         });
 
         const resData = await response.json();
-        console.log('resData', resData);
+
+        if (!response.ok) throw new Error(resData.message);
+
         setIsLoading(false);
         auth.login();
       } catch (err) {
-        console.log('err', err);
         setIsLoading(false);
-        setError(err.message || 'Something went wrong, please try again.');
+        setIsError(err.message || 'Something went wrong, please try again.');
       }
     }
   };
@@ -77,50 +76,59 @@ const Auth = () => {
     setIsLoginMode(prevMode => !prevMode);
   };
 
+  const errorHandler = () => {
+    setIsError(null);
+  };
+
   return (
-    <Card className='authentication'>
-      { isLoading && <LoadingSpinner asOverlay /> }
-      <h2>Login Required</h2>
-      <br />
-      <form onSubmit={ authSubmitHandler }>
-        { !isLoginMode && (
+    <React.Fragment>
+      <ErrorModal
+        error={ isError }
+        onClear={ errorHandler } />
+      <Card className='authentication'>
+        { isLoading && <LoadingSpinner asOverlay /> }
+        <h2>Login Required</h2>
+        <br />
+        <form onSubmit={ authSubmitHandler }>
+          { !isLoginMode && (
+            <Input
+              element='input'
+              id='name'
+              type='text'
+              label='Your Name'
+              validators={ [VALIDATOR_REQUIRE()] }
+              errorText='Please enter a name.'
+              onInput={ inputHandler } />
+          ) }
           <Input
+            id='email'
             element='input'
-            id='name'
-            type='text'
-            label='Your Name'
+            type='email'
+            label='E-mail'
             validators={ [VALIDATOR_REQUIRE()] }
-            errorText='Please enter a name.'
+            errorText='Please enter a valid email address.'
             onInput={ inputHandler } />
-        ) }
-        <Input
-          id='email'
-          element='input'
-          type='email'
-          label='E-mail'
-          validators={ [VALIDATOR_REQUIRE()] }
-          errorText='Please enter a valid email address.'
-          onInput={ inputHandler } />
-        <Input
-          id='password'
-          element='input'
-          type='password'
-          label='Password'
-          validators={ [VALIDATOR_MINLENGTH(5)] }
-          errorText='Please enter a valid password (at least 5 characters).'
-          onInput={ inputHandler } />
+          <Input
+            id='password'
+            element='input'
+            type='password'
+            label='Password'
+            validators={ [VALIDATOR_MINLENGTH(5)] }
+            errorText='Please enter a valid password (at least 5 characters).'
+            onInput={ inputHandler } />
+          <Button
+            type='submit'
+            disabled={ !formState.isValid }>
+            { isLoginMode ? 'LOGIN' : 'SIGNUP' }
+          </Button>
+        </form>
         <Button
-          type='submit'
-          disabled={ !formState.isValid }>
-          { isLoginMode ? 'LOGIN' : 'SIGNUP' }
+          inverse
+          onClick={ switchModeHandler }>
+      SWITCH TO { isLoginMode ? 'SIGNUP' : 'LOGIN' }
         </Button>
-      </form>
-      <Button
-        inverse
-        onClick={ switchModeHandler }>
-        SWITCH TO { isLoginMode ? 'SIGNUP' : 'LOGIN' }
-      </Button>
-    </Card>
+      </Card>
+    </React.Fragment>
   );
 };
 
