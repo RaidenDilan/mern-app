@@ -34,11 +34,6 @@ const App = () => {
         <UserPlaces />
       </Route>
       <Route
-        path='/auth'
-        exact>
-        <Auth />
-      </Route>
-      <Route
         path='/places/new'
         exact>
         <NewPlace />
