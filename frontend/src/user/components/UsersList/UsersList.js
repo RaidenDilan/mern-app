@@ -1,7 +1,7 @@
 import React from 'react';
 
-import UserItem from './UserItem/UserItem';
-import Card from '../../shared/components/UIElements/Card/Card';
+import UserItem from '../UserItem/UserItem';
+import Card from '../../../shared/components/UIElements/Card/Card';
 import './UsersList.css';
 
 const UsersList = props => {
@@ -23,7 +23,7 @@ const UsersList = props => {
           id={ user.id }
           image={ user.image }
           name={ user.name }
-          placeCount={ user.places } />
+          placeCount={ user.places.length } />
       )) }
     </ul>
   );
