@@ -10,7 +10,6 @@ const UserPlaces = () => {
   const [loadedPlaces, setLoadedPlaces] = useState();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const userId = useParams().userId;
-  console.log('userId', userId);
 
   useEffect(() => {
     const fetchPlaces = async () => {
