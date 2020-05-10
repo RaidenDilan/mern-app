@@ -14,7 +14,7 @@ const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode , setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
 
   const [formState, inputHandler, setFormData] = useForm({
     email: {
@@ -51,7 +51,7 @@ const Auth = () => {
         auth.login();
       } catch (err) {
         setIsLoading(false);
-        setIsError(err.message || 'Something went wrong, please try again.');
+        setError(err.message || 'Something went wrong, please try again.');
       }
     }
     else {
@@ -74,7 +74,7 @@ const Auth = () => {
         auth.login();
       } catch (err) {
         setIsLoading(false);
-        setIsError(err.message || 'Something went wrong, please try again.');
+        setError(err.message || 'Something went wrong, please try again.');
       }
     }
   };
@@ -99,13 +99,13 @@ const Auth = () => {
   };
 
   const errorHandler = () => {
-    setIsError(null);
+    setError(null);
   };
 
   return (
     <React.Fragment>
       <ErrorModal
-        error={ isError }
+        error={ error }
         onClear={ errorHandler } />
       <Card className='authentication'>
         { isLoading && <LoadingSpinner asOverlay /> }
