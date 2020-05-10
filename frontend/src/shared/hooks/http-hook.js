@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 
-const useHttpCLient = () => {
+export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -21,17 +21,22 @@ const useHttpCLient = () => {
         method,
         body,
         headers,
-        singal: httpAbortCtrl.signal // to cancel connected requests.
+        signal: httpAbortCtrl.signal // to cancel connected requests.
       });
+
       const resData = await res.json();
+      activeHttpRequests.current = activeHttpRequests.current.filter(reqCtrl => reqCtrl !== httpAbortCtrl); // remove all controllers except for the current request
+
       if (!res.ok) throw new Error(resData.message);
+      setIsLoading(false);
+
       return resData;
     }
     catch (err) {
       setError(err.message);
+      setIsLoading(false);
+      throw err;
     }
-
-    setIsLoading(false);
   }, []);
 
   const clearError = () => {
@@ -41,11 +46,10 @@ const useHttpCLient = () => {
   useEffect(() => {
     // clean up function
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       activeHttpRequests.current.forEach(abortCtrl => abortCtrl.abort());
     };
   }, []);
 
   return { isLoading, error, sendRequest, clearError };
 };
-
-export default useHttpCLient;
