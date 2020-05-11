@@ -64,8 +64,8 @@ const UpdatePlace = () => {
         }),
         { 'Content-Type': 'application/json' }
       );
-      history.push('/' + auth.userId + '/places');
-      // history.push(`/${ auth.userId }/places`);
+      // history.push('/' + auth.userId + '/places');
+      history.push(`/${ auth.userId }/places`);
     } catch (err) {/* err is handled in our custom http hook */}
 
 
