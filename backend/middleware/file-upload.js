@@ -18,7 +18,11 @@ const fileUpload = multer({
       cb(null, uuid() + '.' + ext);
     },
   }),
-  fileFilter: (req, file, cb) => {}
+  fileFilter: (req, file, cb) => {
+    const isValid = !!MIMI_TYPE_MAP[file.mimetype]; // !! =< convert undefined/null to true/false/
+    let err = isValid ? null : new Error('Invalid mime type');
+    cb(err, isValid);
+  }
 });
 
 module.exports = fileUpload;
