@@ -41,7 +41,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     password,
-    image: 'https://cdn4.vectorstock.com/i/1000x1000/64/83/web-developer-avatar-vector-25996483.jpg',
+    image: req.file.path,
     places: []
   });
 
