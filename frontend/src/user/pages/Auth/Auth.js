@@ -82,11 +82,7 @@ const Auth = () => {
         formData.append('password', formState.inputs.password.value);
         formData.append('image', formState.inputs.image.value);
 
-        const res = await sendRequest(
-          'http://localhost:5000/api/users/signup',
-          'POST',
-          formData
-        );
+        const res = await sendRequest('http://localhost:5000/api/users/signup', 'POST', formData);
 
         auth.login(res.user.id);
       } catch (err) {/* err is handled in our custom http hook */}
@@ -113,10 +109,13 @@ const Auth = () => {
               errorText='Please enter a name.'
               onInput={ inputHandler } />
           ) }
-          { !isLoginMode && <ImageUpload
-            center
-            id='image'
-            onInput={ inputHandler } /> }
+          { !isLoginMode && (
+            <ImageUpload
+              center
+              id='image'
+              onInput={ inputHandler }
+              errorText='Please provide an image.' />
+          ) }
           <Input
             id='email'
             element='input'

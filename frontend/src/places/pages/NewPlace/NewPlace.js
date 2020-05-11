@@ -5,6 +5,7 @@ import Input from '../../../shared/components/FormElements/Input/Input';
 import Button from '../../../shared/components/FormElements/Button/Button';
 import ErrorModal from '../../../shared/components/UIElements/ErrorModal/ErrorModal';
 import LoadingSpinner from '../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner';
+import ImageUpload from '../../../shared/components/FormElements/ImageUpload/ImageUpload';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../../shared/util/validators';
 import { useForm } from '../../../shared/hooks/form-hook';
 import { useHttpClient } from '../../../shared/hooks/http-hook';
@@ -15,6 +16,7 @@ import './NewPlace.css';
 const NewPlace = () => {
   const auth = useContext(AuthContext);
   const { isLoading, error , sendRequest, clearError } = useHttpClient();
+
   const [formState, inputHandler] = useForm({
     title: {
       value: '',
@@ -28,6 +30,10 @@ const NewPlace = () => {
       value: '',
       isValid: false
     },
+    image: {
+      value: null,
+      isValid: false
+    }
   }, false);
 
   const history = useHistory();
@@ -35,17 +41,14 @@ const NewPlace = () => {
   const placeSubmitHandler = async event => {
     event.preventDefault();
     try {
-      await sendRequest(
-        'http://localhost:5000/api/places',
-        'POST',
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          address: formState.inputs.address.value,
-          creator: auth.userId
-        }),
-        { 'Content-Type': 'application/json' }
-      );
+      const formData = new FormData();
+      formData.append('title', formState.inputs.title.value);
+      formData.append('description', formState.inputs.description.value);
+      formData.append('address', formState.inputs.address.value);
+      formData.append('image', formState.inputs.image.value);
+      formData.append('creator', auth.userId);
+
+      await sendRequest('http://localhost:5000/api/places', 'POST', formData);
       // Redirect user to a different page
       history.push('/');
     } catch (err) {/* err is handled in our custom http hook */}
@@ -82,6 +85,10 @@ const NewPlace = () => {
           validators={ [VALIDATOR_REQUIRE()] }
           errorText='Please enter a valid address.'
           onInput={ inputHandler } />
+        <ImageUpload
+          id='image'
+          onInput={ inputHandler }
+          errorText='Please provide an image.' />
         <Button
           type='submit'
           disabled={ !formState.isValid }>

@@ -59,9 +59,9 @@ const createPlace = async (req, res, next) => {
   const createdPlace = new Place({
     title,
     description,
-    image: 'https://cdn.pixabay.com/photo/2015/12/08/00/40/empire-state-building-1081929_1280.jpg',
     address,
     location: coordinates,
+    image: req.file.path,
     creator
   });
 
