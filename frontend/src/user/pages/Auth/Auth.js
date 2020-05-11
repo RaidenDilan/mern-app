@@ -1,10 +1,13 @@
 import React, { useState, useContext } from 'react';
 
-import Card from '../../../shared/components/UIElements/Card/Card';
 import Input from '../../../shared/components/FormElements/Input/Input';
 import Button from '../../../shared/components/FormElements/Button/Button';
+import ImageUpload from '../../../shared/components/FormElements/ImageUpload/ImageUpload';
+
+import Card from '../../../shared/components/UIElements/Card/Card';
 import ErrorModal from '../../../shared/components/UIElements/ErrorModal/ErrorModal';
 import LoadingSpinner from '../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner';
+
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../../shared/util/validators';
 import { useForm } from '../../../shared/hooks/form-hook';
 import { useHttpClient } from '../../../shared/hooks/http-hook';
@@ -24,7 +27,7 @@ const Auth = () => {
     password: {
       value: '',
       isValid: false
-    },
+    }
   }, false);
 
   const authSubmitHandler = async event => {
@@ -102,6 +105,9 @@ const Auth = () => {
               errorText='Please enter a name.'
               onInput={ inputHandler } />
           ) }
+          { !isLoginMode && <ImageUpload
+            center
+            id='image-id' /> }
           <Input
             id='email'
             element='input'
