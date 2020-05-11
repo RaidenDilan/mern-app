@@ -30,8 +30,34 @@ const Auth = () => {
     }
   }, false);
 
+  const switchModeHandler = () => {
+    if (!isLoginMode) {
+      setFormData({
+        ...formState.inputs,
+        name: undefined,
+        image: undefined
+      }, formState.inputs.email.isValid && formState.inputs.password.isValid);
+    }
+    else {
+      setFormData({
+        ...formState.inputs,
+        name: {
+          value: '',
+          isValid: false
+        },
+        image: {
+          value: null,
+          isValid: false
+        }
+      }, false);
+    }
+    setIsLoginMode(prevMode => !prevMode);
+  };
+
   const authSubmitHandler = async event => {
     event.preventDefault();
+
+    console.log(formState.inputs);
 
     if (isLoginMode) {
       try {
@@ -66,25 +92,6 @@ const Auth = () => {
     }
   };
 
-  const switchModeHandler = () => {
-    if (!isLoginMode) {
-      setFormData({
-        ...formState.inputs,
-        name: undefined
-      }, formState.inputs.email.isValid && formState.inputs.password.isValid);
-    }
-    else {
-      setFormData({
-        ...formState.inputs,
-        name: {
-          value: '',
-          isValid: false
-        }
-      }, false);
-    }
-    setIsLoginMode(prevMode => !prevMode);
-  };
-
   return (
     <React.Fragment>
       <ErrorModal
@@ -107,7 +114,8 @@ const Auth = () => {
           ) }
           { !isLoginMode && <ImageUpload
             center
-            id='image-id' /> }
+            id='image'
+            onInput={ inputHandler } /> }
           <Input
             id='email'
             element='input'
