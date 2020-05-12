@@ -76,9 +76,10 @@ const App = () => {
         <MainNavigation />
         <main>
           <Suspense
-            fallback={ <div className='center'>
-              <LoadingSpinner />
-            </div> }>
+            fallback={
+              <div className='center'>
+                <LoadingSpinner />
+              </div> }>
             { routes }
           </Suspense>
         </main>

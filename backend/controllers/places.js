@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 
 const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
@@ -165,7 +164,7 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
 
-  fs.unlink(imagePath, err => console.log(err));
+  fs.unlink(imagePath, err => console.log('imagePath', err));
   res.status(200).json({ message: `Deleted Place with the id of : ${ placeId }` });
 };
 
