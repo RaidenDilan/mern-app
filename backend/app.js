@@ -45,5 +45,5 @@ mongoose
     useUnifiedTopology: true,
     useCreateIndex: true
   })
-  .then(() => (console.log('Connected to database!'), app.listen(process.env.PORT || 5000)))
+  .then(() => app.listen(process.env.PORT || 5000))
   .catch((err) => console.log('Connection failed!', err));
