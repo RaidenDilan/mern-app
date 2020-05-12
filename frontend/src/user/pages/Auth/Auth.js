@@ -68,8 +68,7 @@ const Auth = () => {
           }),
           { 'Content-Type': 'application/json' }
         );
-
-        auth.login(res.user.id);
+        auth.login(res.userId, res.token);
       } catch (err) {/* err is handled in our custom http hook */}
     }
     else {
@@ -79,10 +78,8 @@ const Auth = () => {
         formData.append('email', formState.inputs.email.value);
         formData.append('password', formState.inputs.password.value);
         formData.append('image', formState.inputs.image.value);
-
         const res = await sendRequest('http://localhost:5000/api/users/signup', 'POST', formData);
-
-        auth.login(res.user.id);
+        auth.login(res.userId, res.token);
       } catch (err) {/* err is handled in our custom http hook */}
     }
   };

@@ -48,7 +48,9 @@ const NewPlace = () => {
       formData.append('image', formState.inputs.image.value);
       formData.append('creator', auth.userId);
 
-      await sendRequest('http://localhost:5000/api/places', 'POST', formData);
+      await sendRequest('http://localhost:5000/api/places', 'POST', formData, {
+        Authorization: 'Bearer ' + auth.token
+      });
       // Redirect user to a different page
       history.push('/');
     } catch (err) {/* err is handled in our custom http hook */}
