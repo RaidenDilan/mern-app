@@ -27,7 +27,7 @@ export const useAuth = () => {
   }, []);
 
   useEffect(() => {
-    if (token) {
+    if (token && tokenExpirationDate) {
       const remainingTime = tokenExpirationDate.getTime() - new Date().getTime(); // get remianing time in milliseconds.
       logoutTimer = setTimeout(logout, remainingTime);
     }
