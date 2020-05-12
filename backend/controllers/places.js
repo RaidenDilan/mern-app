@@ -50,7 +50,7 @@ const createPlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return next(new HttpError('Invalid inputs passed, please check your data', 422)); // you cna also console log the errors array from the validationResult object.
 
-  const { title, description, address, creator } = req.body;
+  const { title, description, address } = req.body;
   let coordinates;
 
   try {
@@ -65,13 +65,13 @@ const createPlace = async (req, res, next) => {
     address,
     location: coordinates,
     image: req.file.path,
-    creator
+    creator: req.userData.userId
   });
 
   let user;
 
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req.userData.userId );
   } catch (err) {
     const error = new HttpError('Creating place failed, please try agin.', 404);
     return next(error);
