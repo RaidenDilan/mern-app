@@ -31,13 +31,12 @@ const Placeitem = props => {
     setShowConfirmModal(false);
     try {
       await sendRequest(
-        `http://localhost:5000/api/places/${ props.id }`,
+        `${ process.env.REACT_APP_BACKEND_URL }/places/${ props.id }`,
         'DELETE',
         null,
         { Authorization: 'Bearer ' + auth.token }
       );
       props.onDelete(props.id);
-      // history.push('/');
     } catch (err) {/* err is handled in our custom http hook */}
   };
 
@@ -81,7 +80,7 @@ const Placeitem = props => {
           { isLoading && <LoadingSpinner asOverlay /> }
           <div className='place-item__image'>
             <img
-              src={ `http://localhost:5000/${ props.image }` }
+              src={ `${ process.env.REACT_APP_ASSET_URL }/${ props.image }` }
               alt={ props.title } />
           </div>
           <div className='place-item__info'>
