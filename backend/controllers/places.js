@@ -47,7 +47,10 @@ const getPlacesByUserId = async (req, res, next) => {
 
 const createPlace = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(new HttpError('Invalid inputs passed, please check your data', 422)); // you cna also console log the errors array from the validationResult object.
+  if (!errors.isEmpty()) {
+    const error = new HttpError('Invalid inputs passed, please check your data', 422);  // you can also console log the errors array from the validationResult object.
+    return next(error);
+  }
 
   const { title, description, address } = req.body;
   let coordinates;
@@ -70,7 +73,7 @@ const createPlace = async (req, res, next) => {
   let user;
 
   try {
-    user = await User.findById(req.userData.userId );
+    user = await User.findById(req.userData.userId);
   } catch (err) {
     const error = new HttpError('Creating place failed, please try agin.', 404);
     return next(error);
@@ -89,6 +92,7 @@ const createPlace = async (req, res, next) => {
     await user.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
+    console.log('err', err);
     const error = new HttpError('Creating place failed, please try again.', 500);
     return next(error);
   }

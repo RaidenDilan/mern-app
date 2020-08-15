@@ -19,6 +19,7 @@ const getUsers = async (req, res, next) => {
 
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     const error = new HttpError('Invalid inputs passed, please check your data', 422); // you can also console log the errors array from the validationResult object.
     return next(error);
@@ -50,8 +51,8 @@ const signup = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    password: hashedPassword,
     image: req.file.path,
+    password: hashedPassword,
     places: []
   });
 
@@ -74,7 +75,9 @@ const signup = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token: token }); // It's up to the developer and what they want to return.
+  res
+    .status(201)
+    .json({ userId: createdUser.id, email: createdUser.email, token: token }); // It's up to the developer and what they want to return.
 };
 
 const login = async (req, res, next) => {
